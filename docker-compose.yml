@@ -1,8 +1,8 @@
 version: "3.1"
 services:
-  db-template:
+  db-4cadia:
     image: mongo:4.2
-    container_name: db-template
+    container_name: db-4cadia
     # restart: always
     ports:
       - ${DB_PORT}:27017
@@ -15,20 +15,20 @@ services:
     volumes:
       - mongodbdata:/data/db
     networks:
-        - net-template
+        - net-4cadia
 
-  api-template:
+  api-4cadia:
     image: node:10.14.0
-    container_name: api-template
+    container_name: api-4cadia
     # restart: always
     env_file:
      - .env
     depends_on:
-      - db-template
+      - db-4cadia
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     networks:
-        - net-template
+        - net-4cadia
     volumes:
       - .:/usr/src/app
     working_dir: /usr/src/app
@@ -40,12 +40,9 @@ services:
         max-file: "5"
 
 networks:
-  net-template:
+  net-4cadia:
     external:
-      name: net-template
-    # driver: "bridge"
-
-
+      name: net-4cadia
 volumes:
   mongodbdata:
     driver: local
