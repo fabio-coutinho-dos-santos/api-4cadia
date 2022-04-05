@@ -17,7 +17,7 @@ const options = {
 	family: 4 // Use IPv4, skip trying IPv6
 }
 
-module.exports = mongoose.createConnection(url, options, function (err, res) {
+module.exports = mongoose.createConnection(url, options, function (err) {
 	if (err) {
 		console.log ("ERROR connecting to: " + url + ". " + err)
 	} else {

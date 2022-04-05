@@ -17,8 +17,4 @@ server.listen(process.emit.PORT||port,()=>{
 	console.log("Backend rodando na porta " + port)
 })
 
-server.get("/",(req,resp)=>{
-	resp.send("Test Working")
-})
-
 module.exports = server

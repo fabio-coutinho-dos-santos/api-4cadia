@@ -1,32 +1,21 @@
-const express = require('express')
-
+const express = require("express")
+const auth = require("../Model/User/auth")
 
 module.exports = function(server)
 {
-    const api = express.Router()
-    server.use('/api',api)
-
-    const openApi = express.Router()
-    server.use('/oapi',openApi)
+	const openApi = express.Router()
+	server.use("/oapi",openApi)
     
-    // const protectedApi = express.Router()
-    // server.use('/api',protectedApi)
-    // protectedApi.use(deviceAuth)
+	const protectedApi = express.Router()
+	server.use("/api",protectedApi)
+	protectedApi.use(auth)
 
-    // const deviceAuthService = require('../Device/deviceAuthService')
-    // openApi.post('/signup',deviceAuthService.signup)
-    // openApi.post('/login',deviceAuthService.login)
-    // openApi.post('/validateToken',deviceAuthService.validateToken)
+	const authService = require("../Model/User/authService")
+	openApi.post("/signup",authService.signup)
+	openApi.post("/login",authService.login)
+	openApi.post("/validateToken",authService.validateToken)
 
-    // const deviceService = require('../Device/deviceService')
-    // deviceService.register(protectedApi,'/device')
+	// const deviceService = require('../Device/deviceService')
+	// deviceService.register(protectedApi,'/device')
 
-    // const dadoService = require('../DadoTeste/dadoService')
-    // dadoService.register(openApi,'/dado')
-
-    // const tokenService = require('../Token/tokenService')
-    // tokenService.register(protectedApi,'/token')
-
-    // const rnaDataService = require('../RnaData/rnaDataService')
-    // rnaDataService.register(openApi,'/rna')
 }
