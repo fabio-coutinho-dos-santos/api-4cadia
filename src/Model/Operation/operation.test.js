@@ -25,7 +25,6 @@ test("Test Login with User registered",()=>{
 			expect(response.body.token).toBeDefined()
 			expect(response.body.email).toBe("fabio.santcou@gmail.com")
 			globalToken = response.body.token
-			console.log("GLOBAL 1 = "+globalToken)
 		})
 
 })
@@ -36,7 +35,6 @@ test("Test Save Operation",()=>{
 		"authorization":globalToken,
 	}
 
-	console.log("GLOBAL = "+globalToken)
 	return request (URL_TEST)
 		.post("/api/operation/save")
 		.set(commonHeaders)
@@ -55,5 +53,24 @@ test("Test Save Operation",()=>{
 			expect(response.body.amount).toBe(50)
 			expect(response.body.date).toBe("05/06/2022")
 			expect(response.body.type).toBe("Credit")
+		})
+})
+
+//==================================================================================================================================================================================================
+
+//======================================================================================== Test calculate Balance ==================================================================================
+
+test("Test Save Operation",()=>{
+	
+	var commonHeaders = { 
+		"authorization":globalToken,
+	}
+
+	return request (URL_TEST)
+		.get("/api/operation/balance")
+		.set(commonHeaders)
+		.then(response => {
+			expect(response.status).toBe(200)
+			expect(response.body.balance).toBeDefined()
 		})
 })

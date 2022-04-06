@@ -58,7 +58,7 @@ test("Test Register User with different passwords",()=>{
 
 //====================================================================== Login tests ==================================================================================
 
-test("Test Register with User registered",()=>{
+test("Test Login with User registered",()=>{
 	return request (URL_TEST)
 		.post("/oapi/login")
 		.send({
