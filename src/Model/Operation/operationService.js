@@ -1,6 +1,5 @@
 const Operation = require("./operation")
 const lodash = require("lodash")
-const routes = require("../../Config/routes")
 
 Operation.methods(["get","put","delete"])
 Operation.updateOptions({new:true, runValidators: true})
@@ -37,8 +36,6 @@ Operation.route("save", (req,resp)=>{
 	const type = req.body.type
 	
 	const newOperation = new Operation({code,description,amount,date,type})
-
-	console.log(newOperation)
 
 	newOperation.save(err=>{
 		if(err){
