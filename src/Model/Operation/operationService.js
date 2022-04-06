@@ -46,5 +46,66 @@ Operation.route("save", (req,resp)=>{
 	})
 })
 
+// ============================================================================ Functions to calculate balance =====================================================================================
+
+Operation.route("balance",(req,resp)=>{
+
+	let sumCredit=0
+	let sumDebit=0
+	calculateTotalCredit().then((sum)=>{
+		sumCredit = sum.sumCredit
+		calculateTotalDebit().then((sum)=>{
+			sumDebit = sum.sumDebit
+			calculateBalance(sumCredit,sumDebit,resp)
+		})
+	})	
+})
+
+let calculateTotalCredit = (resp) =>{
+
+	return new Promise(resolve =>{
+		Operation.aggregate([
+			{$match:{type:"Credit"}},
+			{$group:{
+				_id:null,
+				sumCredit:{$sum:"$amount"}
+			}},{$project:{_id:0,sumCredit:1}}
+		],
+		function (err,sumCredit) {
+			if(err) {
+				return resp.status(500).json({errors:[err]})
+			}else{
+				resolve(sumCredit[0])
+			}
+		})
+	})
+}
+
+let calculateTotalDebit = (resp) =>{
+	return new Promise(resolve =>{
+		Operation.aggregate([
+			{$match:{type:"Debit"}},
+			{$group:{
+				_id:null,
+				sumDebit:{$sum:"$amount"}
+			}},{$project:{_id:0,sumDebit:1}}
+		],
+		function (err,sumDebit) {
+			if(err) {
+				return resp.status(500).json({errors:[err]})
+			}else{
+				resolve(sumDebit[0])
+			}
+		})
+	})
+}
+
+let calculateBalance = (sumCredit,sumDebit,resp) => {
+	let balance = sumCredit-sumDebit
+	resp.status(200).json({balance:balance})
+}
+
+// ============================================================================ Functions to calculate balance =====================================================================================
+
 
 module.exports = Operation
