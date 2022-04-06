@@ -41,7 +41,7 @@ Operation.route("save", (req,resp)=>{
 		if(err){
 			return resp.status(400).json({errors:[err]})
 		}else{
-			resp.status(200).json(newOperation)
+			resp.status(201).json(newOperation)
 		}
 	})
 })

@@ -2,7 +2,7 @@ const restful = require("node-restful")
 const mongoose = restful.mongoose
 
 const OperationSchema = new mongoose.Schema({
-	code: {type: String, required: true},
+	code: {type: String, unique:true, required: true},
 	description: {type: String, required: true},
 	amount: {type: Number, required: true},
 	date: {type: String, required: true},
