@@ -27,7 +27,7 @@ const login = (req, res) => {
 			const {_id, name, email} = user
 			res.json({_id, name, email, token })
 		} else {
-			return res.status(400).send({errors: ["User or Password invalid"]})
+			return res.status(400).send({errors: ["Invalid user or password"]})
 		}
 	})
 }

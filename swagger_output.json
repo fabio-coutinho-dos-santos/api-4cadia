@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "REST API - TEMPLATE",
+    "title": "REST API - TEST 4CADIA",
     "description": ""
   },
   "host": "localhost:3000",
@@ -11,5 +11,370 @@
     "http",
     "https"
   ],
-  "paths": {}
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "https://petstore.swagger.io/oauth/authorize",
+      "flow": "implicit",
+      "scopes": {
+        "read_pets": "read your pets",
+        "write_pets": "modify pets in your account"
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+
+
+  "paths": {
+
+    "/api/user":{
+      "get": {
+        "tags":["User"],
+        "summary": "Get all Users",
+        "description": "",
+        "produces": [
+          "application/json"
+        ], 
+       "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "User found."
+          },
+          "403": {
+            "description": "Failed to authenticate token.",
+            "schema":{
+              "type":"object",
+              "properties": {
+                "errors":{
+                  "type":"array",
+                  "items": {
+                    "type":"string",
+                    "example":"Failed to authenticate token."
+                  }
+                }
+              }
+            } 
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+  
+    "/oapi/user/signup":{
+      "post": {
+        "tags":["User"],
+        "summary": "Register a new user",
+        "description": "",
+        "produces": [
+          "application/json"
+        ], 
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            },
+            "description": "User registered successfully"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+  
+          "400": {
+            "description": "Invalid Email.",
+            "schema":{
+              "type":"object",
+              "properties": {
+                "errors":{
+                  "type":"array",
+                  "items": {
+                    "type":"string",
+                    "example":"Invalid Email"
+                  }
+                }
+              }
+            } 
+          },
+          "401": {
+            "description": "Invalid Password",
+            "schema":{
+              "type":"object",
+              "properties": {
+                "errors":{
+                  "type":"array",
+                  "items": {
+                    "type":"string",
+                    "example":"Invalid Password"
+                  }
+                }
+              }
+            } 
+          },
+          "402": {
+            "description": "Passwords don't match",
+            "schema":{
+              "type":"object",
+              "properties": {
+                "errors":{
+                  "type":"array",
+                  "items": {
+                    "type":"string",
+                    "example":"Passwords don't match"
+                  }
+                }
+              }
+            } 
+          },
+          "403": {
+            "description": "This user is already registered",
+            "schema":{
+              "type":"object",
+              "properties": {
+                "errors":{
+                  "type":"array",
+                  "items": {
+                    "type":"string",
+                    "example":"This user is already registered"
+                  }
+                }
+              }
+            } 
+          }
+        }
+      }
+    },
+
+    "/oapi/user/login":{
+      "post": {
+        "tags":["User"],
+        "summary": "User login",
+        "description": "",
+        "produces": [
+          "application/json"
+        ], 
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            },
+            "description": "User logged successfully"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }, "400": {
+            "description": "Usuário/Senha inválido.",
+            "schema":{
+              "type":"object",
+              "properties": {
+                "errors":{
+                  "type":"array",
+                  "items": {
+                    "type":"string",
+                    "example":"Invalid user or password"
+                  }
+                }
+              }
+            } 
+          }
+        }
+      }
+    },
+    
+    "/oapi/user/validateToken":{
+      "post": {
+        "tags":["User"],
+        "summary": "Validate a owner authorization token",
+        "description": "",
+        "produces": [
+          "application/json"
+        ], 
+        "parameters": [
+          {
+            "name": "object",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "type":"object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...."
+                }
+              }
+            }
+          
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type":"object",
+              "properties": {
+                "valid":{
+                  "type":"boolean",
+                  "example":true
+                }
+              }
+            },
+            "description": "Answers if it is a valid token or not"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  
+  },
+
+  
+ 
+  
+  "definitions": {
+
+    "User": {
+      "type": "array",
+      "items":{
+        "type":"object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "asdasd-23423-sd434sd-ffsdfsd"
+          },
+          "name": {
+            "type": "string",
+            "example": "Simon Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "simon@gmail.com.br"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        },"required": [
+          "name",
+          "email",
+          "password"
+        ],
+        "xml": {
+          "name": "User"
+        }
+      }
+    },
+
+    "AddUser": {
+      "type":"object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Simon Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "simon@gmail.com.br"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        },
+        "confirmPassword": {
+          "type": "string",
+          "example": "password123"
+        }
+      },"required": [
+        "name",
+        "email",
+        "password",
+        "confirmPassword"
+      ],
+      "xml": {
+        "name": "AddOwner"
+      }
+    },
+
+    "LoginUser": {
+      "type":"object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "simon@gmail.com.br"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ],
+      "xml": {
+        "name": "LoginUser"
+      }
+    },
+    
+    "LoginResponse": {
+      "type":"object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "asdasd-23423-sd434sd-ffsdfsd"
+        },
+        "email": {
+          "type": "string",
+          "example": "simon@gmail.com.br"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        },
+        "token": {
+          "type": "string",
+          "example": "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnt9LCJnZXR0ZXJzIjp7fSwiX2lkIjoiNjE0NTA0YmQwZjdmM2ZhOTI3ZjQxZTVkIiwid2FzUG9wdWxhdGVkIjpmYWxzZSwiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsidXVpZERldmljZSI6ImluaXQiLCJxdWFudEtleXMiOiJpbml0IiwiZW1haWwiOiJpbml0IiwibmFtZSI6ImluaXQiLCJfaWQiOiJpbml0IiwicGFzc3dvcmQiOiJpbml0IiwiX192IjoiaW5pdCJ9LCJzdGF0ZXMiOnsiaWdub3JlIjp7fSwiZGVmYXVsdCI6e30sImluaXQiOnsiX2lkIjp0cnVlLCJuYW1lIjp0cnVlLCJlbWFpbCI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsInV1aWR"
+        }
+      },
+      "xml": {
+        "name": "LoginResponse"
+      }
+    }
+  
+  }
 }
