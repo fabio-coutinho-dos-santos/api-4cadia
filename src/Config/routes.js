@@ -15,7 +15,7 @@ module.exports = function(server)
 	openApi.post("/login",authService.login)
 	openApi.post("/validateToken",authService.validateToken)
 
-	// const deviceService = require('../Device/deviceService')
-	// deviceService.register(protectedApi,'/device')
+	const userService = require("../Model/User/userService")
+	userService.register(protectedApi,"/user")
 
 }
