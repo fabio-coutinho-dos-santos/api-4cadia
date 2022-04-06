@@ -197,7 +197,7 @@
           "500": {
             "description": "Internal Server Error"
           }, "400": {
-            "description": "Usuário/Senha inválido.",
+            "description": "Invalid user or password",
             "schema":{
               "type":"object",
               "properties": {
@@ -259,13 +259,140 @@
           }
         }
       }
+    },
+
+    "/api/operation":{
+      "get": {
+        "tags":["Operation"],
+        "summary": "Get all Operations",
+        "description": "",
+        "produces": [
+          "application/json"
+        ], 
+       "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Operations"
+            },
+            "description": "Operations found."
+          },
+          "403": {
+            "description": "Failed to authenticate token.",
+            "schema":{
+              "type":"object",
+              "properties": {
+                "errors":{
+                  "type":"array",
+                  "items": {
+                    "type":"string",
+                    "example":"Failed to authenticate token."
+                  }
+                }
+              }
+            } 
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+
+    "/api/operation/save":{
+      "post": {
+        "tags":["Operation"],
+        "summary": "Save a Operation",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OperationSave"
+            }
+          }
+        ],
+       "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/OperationsResponseLogin"
+            },
+            "description": "Operations found."
+          },
+          "403": {
+            "description": "Failed to authenticate token.",
+            "schema":{
+              "type":"object",
+              "properties": {
+                "errors":{
+                  "type":"array",
+                  "items": {
+                    "type":"string",
+                    "example":"Failed to authenticate token."
+                  }
+                }
+              }
+            } 
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+
+    "/api/operation/balance":{
+      "get": {
+        "tags":["Operation"],
+        "summary": "Get balance",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+       "responses": {
+          "200": {
+            "schema": {
+              "type":"object",
+              "properties": {
+                "balance":{
+                  "type":"number",
+                  "example":360
+                }
+              }
+            },
+            "description": "Balance calculated."
+          },
+          "403": {
+            "description": "Failed to authenticate token.",
+            "schema":{
+              "type":"object",
+              "properties": {
+                "errors":{
+                  "type":"array",
+                  "items": {
+                    "type":"string",
+                    "example":"Failed to authenticate token."
+                  }
+                }
+              }
+            } 
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
-  
   },
 
   
- 
-  
+
+
   "definitions": {
 
     "User": {
@@ -374,7 +501,119 @@
       "xml": {
         "name": "LoginResponse"
       }
+    },
+
+    "Operations": {
+      "type": "array",
+      "items":{
+        "type":"object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "asdasd-23423-sd434sd-ffsdfsd"
+          },
+          "code": {
+            "type": "string",
+            "example": "1234"
+          },
+          "description": {
+            "type": "string",
+            "example": "Services"
+          },
+          "amount": {
+            "type": "number",
+            "example": 20
+          },
+          "date": {
+            "type": "string",
+            "example": "06/05/2022"
+          },
+          "type": {
+            "type": "enum",
+            "example": "Credit"
+          }
+        },"required": [
+          "code",
+          "description",
+          "amount",
+          "date",
+          "type"        ],
+        "xml": {
+          "name": "Operation"
+        }
+      }
+    },
+
+    "OperationSave": {
+      "type":"object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "1234"
+        },
+        "description": {
+          "type": "string",
+          "example": "Services"
+        },
+        "amount": {
+          "type": "number",
+          "example": 20
+        },
+        "date": {
+          "type": "string",
+          "example": "06/05/2022"
+        },
+        "type": {
+          "type": "enum",
+          "example": "Credit"
+        }
+      },"required": [
+        "code",
+        "description",
+        "amount",
+        "date",
+        "type"        ],
+      "xml": {
+        "name": "OperationSave"
+      }
+    },
+
+    "OperationsResponseLogin": {
+      "type":"object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "asdasd-23423-sd434sd-ffsdfsd"
+        },
+        "code": {
+          "type": "string",
+          "example": "1234"
+        },
+        "description": {
+          "type": "string",
+          "example": "Services"
+        },
+        "amount": {
+          "type": "number",
+          "example": 20
+        },
+        "date": {
+          "type": "string",
+          "example": "06/05/2022"
+        },
+        "type": {
+          "type": "enum",
+          "example": "Credit"
+        }
+      },"required": [
+        "code",
+        "description",
+        "amount",
+        "date",
+        "type"        ],
+      "xml": {
+        "name": "OperationsResponseLogin"
+      }
     }
-  
   }
 }
