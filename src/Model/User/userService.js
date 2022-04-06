@@ -1,10 +1,10 @@
 const User = require("./user")
 const lodash = require("lodash")
 
-User.methods(["get","post","put","delete"])
+User.methods(["get","put","delete"])
 User.updateOptions({new:true, runValidators: true})
 
-User.after("post",sendErrorsOrNext).after("put",sendErrorsOrNext)
+User.after("put",sendErrorsOrNext)
 
 function sendErrorsOrNext(req, resp, next){
 	const bundle = resp.locals.bundle
