@@ -18,4 +18,7 @@ module.exports = function(server)
 	const userService = require("../Model/User/userService")
 	userService.register(protectedApi,"/user")
 
+	const operationService = require("../Model/Operation/operationService")
+	operationService.register(protectedApi,"/operation")
+
 }
