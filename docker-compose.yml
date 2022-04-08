@@ -32,7 +32,7 @@ services:
     volumes:
       - .:/usr/src/app
     working_dir: /usr/src/app
-    command: bash -c "npm install && npm start" 
+    command: bash -c "npm start" 
     logging:
       driver: "json-file"
       options:

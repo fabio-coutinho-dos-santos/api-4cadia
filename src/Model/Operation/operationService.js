@@ -33,9 +33,10 @@ Operation.route("save", (req,resp)=>{
 	const description = req.body.description
 	const amount = req.body.amount
 	const date = req.body.date
+	const hour = req.body.hour
 	const type = req.body.type
 	
-	const newOperation = new Operation({code,description,amount,date,type})
+	const newOperation = new Operation({code,description,amount,date,hour,type})
 
 	newOperation.save(err=>{
 		if(err){
@@ -106,6 +107,32 @@ let calculateBalance = (sumCredit,sumDebit,resp) => {
 }
 
 // ============================================================================ Functions to calculate balance =====================================================================================
+
+Operation.route("getStatementByDate",(req,resp)=>{
+
+	const month = req.query.month
+	const year = req.query.year
+
+	let regex= new RegExp(""+month+"/.*/"+year)
+    
+	Operation.find((err,operation)=>{
+		if(err) {
+			return resp.status(500).json({errors:[err]})
+		}else if(operation){
+			Operation.aggregate([
+				{$match: {date: regex}},
+				{$sort : {date: 1}}],function (err, result) {
+				if(err) {
+					return resp.status(800).json({errors:[err]})
+				}else{
+					resp.status(200).json(result)
+				}
+			})
+		}else{
+			return resp.status(400).send({errors: ["Error on to get statement"]})
+		}
+	})
+})
 
 
 module.exports = Operation

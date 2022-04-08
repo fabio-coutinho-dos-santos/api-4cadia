@@ -11,6 +11,7 @@ beforeAll(()=>{
 
 //====================================================================== Save Operation tests ==================================================================================
 
+// to make login with user registered to get the token
 test("Test Login with User registered",()=>{
 	return request (URL_TEST)
 		.post("/oapi/login")
@@ -43,6 +44,7 @@ test("Test Save Operation",()=>{
 			description:"Test",
 			amount:50,
 			date:"05/06/2022",
+			hour:"20:00",
 			type:"Credit"
 		})
 		.then(response => {
@@ -52,6 +54,7 @@ test("Test Save Operation",()=>{
 			expect(response.body.description).toBe("Test")
 			expect(response.body.amount).toBe(50)
 			expect(response.body.date).toBe("05/06/2022")
+			expect(response.body.hour).toBe("20:00")
 			expect(response.body.type).toBe("Credit")
 		})
 })
@@ -72,6 +75,24 @@ test("Test Calculate balance",()=>{
 		.then(response => {
 			expect(response.status).toBe(200)
 			expect(response.body.balance).toBeDefined()
+		})
+})
+
+//==================================================================================================================================================================================================
+
+//======================================================================================== Test calculate Balance ==================================================================================
+
+test("Test get statement by date",()=>{
+	
+	var commonHeaders = { 
+		"authorization":globalToken,
+	}
+
+	return request (URL_TEST)
+		.get("/api/operation/getStatementByDate?month=04&year=2022")
+		.set(commonHeaders)
+		.then(response => {
+			expect(response.status).toBe(200)
 		})
 })
 

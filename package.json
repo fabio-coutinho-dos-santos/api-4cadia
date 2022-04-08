@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "./node_modules/nodemon/bin/nodemon.js index.js",
+    "start-pm2": "pm2-runtime start index.js",
     "swagger-autogen": "node swagger.js"
   },
   "dependencies": {

@@ -6,6 +6,7 @@ const OperationSchema = new mongoose.Schema({
 	description: {type: String, required: true},
 	amount: {type: Number, required: true},
 	date: {type: String, required: true},
+	hour: {type: String, required: true},
 	type:{type:String,required:true,
 		enum: {
 			values:["Credit","Debit"]
