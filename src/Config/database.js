@@ -17,17 +17,22 @@ const options = {
 	family: 4 // Use IPv4, skip trying IPv6
 }
 
-module.exports = mongoose.createConnection(url, options, function (err) {
-	if (err) {
-		console.log ("ERROR connecting to: " + url + ". " + err)
-	} else {
-		console.log ("Succeeded connected to: " + url)
-    
-	}
-}) 
-  
-mongoose.connect(url,options)
+try{
+	module.exports = mongoose.createConnection(url, options, function (err) {
+		if (err) {
+			console.log ("ERROR connecting to: " + url + ". " + err)
+		} else {
+			console.log ("Succeeded connected to: " + url)
+		
+		}
+	}) 
+	mongoose.connect(url,options)
+	
+	mongoose.Error.messages.general.required = "O atributo '{PATH}' é obrigatório"
+	mongoose.Error.messages.Number.min = "O '{VALUE}' informado é menor que o limite mínimo de '{MIN}'!"
+	mongoose.Error.messages.Number.max = "O '{VALUE}' informado é maior que o limite máximo de '{MAX}'!"
+}catch(error){
+	throw new Error(error.message)
+}
 
-mongoose.Error.messages.general.required = "O atributo '{PATH}' é obrigatório"
-mongoose.Error.messages.Number.min = "O '{VALUE}' informado é menor que o limite mínimo de '{MIN}'!"
-mongoose.Error.messages.Number.max = "O '{VALUE}' informado é maior que o limite máximo de '{MAX}'!"
+

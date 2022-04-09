@@ -29,30 +29,34 @@ function parseErrors(nodeRestfulErrors) {
 
 Operation.route("save", (req, resp) => {
 
-	const idUser = req.body.idUser
-	const code = req.body.code
-	const description = req.body.description
-	const amount = req.body.amount
-	const date = req.body.date
-	const hour = req.body.hour
-	const type = req.body.type
+	try{
+		const idUser = req.body.idUser
+		const code = req.body.code
+		const description = req.body.description
+		const amount = req.body.amount
+		const date = req.body.date
+		const hour = req.body.hour
+		const type = req.body.type
 
-	if (validateDate(date) && validatenHour(hour)){
-		const newOperation = new Operation({ idUser, code, description, amount, date, hour, type })
+		if (validateDate(date) && validatenHour(hour)){
+			const newOperation = new Operation({ idUser, code, description, amount, date, hour, type })
 
-		newOperation.save(err => {
-			if (err) {
-				return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: [err] })
-			} else {
-				resp.status(HttpStatusCode.code.POST_OK).json(newOperation)
-			}
-		})
-	}else if (validateDate(date) && !validatenHour(hour)){
-		return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: "Invalid hour" })
-	}else if (!validateDate(date) && validatenHour(hour)){
-		return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: "Invalid date" })
-	}else if (!validateDate(date) && !validatenHour(hour)){
-		return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: "Invalid date and hour" })
+			newOperation.save(err => {
+				if (err) {
+					return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: [err] })
+				} else {
+					resp.status(HttpStatusCode.code.POST_OK).json(newOperation)
+				}
+			})
+		}else if (validateDate(date) && !validatenHour(hour)){
+			return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: "Invalid hour" })
+		}else if (!validateDate(date) && validatenHour(hour)){
+			return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: "Invalid date" })
+		}else if (!validateDate(date) && !validatenHour(hour)){
+			return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: "Invalid date and hour" })
+		}
+	}catch(error){
+		throw new Error (error.message)
 	}
 	
 
@@ -114,16 +118,19 @@ let validatenHour = (hourComplete) => {
 // ============================================================================ Functions to calculate balance =====================================================================================
 
 Operation.route("balance", (req, resp) => {
-
-	let sumCredit = 0
-	let sumDebit = 0
-	calculateTotalCredit().then((sum) => {
-		sumCredit = sum.sumCredit
-		calculateTotalDebit().then((sum) => {
-			sumDebit = sum.sumDebit
-			calculateBalance(sumCredit, sumDebit, resp)
+	try{
+		let sumCredit = 0
+		let sumDebit = 0
+		calculateTotalCredit().then((sum) => {
+			sumCredit = sum.sumCredit
+			calculateTotalDebit().then((sum) => {
+				sumDebit = sum.sumDebit
+				calculateBalance(sumCredit, sumDebit, resp)
+			})
 		})
-	})
+	}catch(error){
+		throw new Error(error.message)
+	}
 })
 
 let calculateTotalCredit = (resp) => {
@@ -178,28 +185,32 @@ let calculateBalance = (sumCredit, sumDebit, resp) => {
 
 Operation.route("getStatementByDate", (req, resp) => {
 
-	const month = req.query.month
-	const year = req.query.year
+	try{
+		const month = req.query.month
+		const year = req.query.year
 
-	let regex = new RegExp("" + month + "/.*/" + year)
+		let regex = new RegExp("" + month + "/.*/" + year)
 
-	Operation.find((err, operation) => {
-		if (err) {
-			return resp.status(HttpStatusCode.code.INTERNAL_SERVER).json({ errors: [err] })
-		} else if (operation) {
-			Operation.aggregate([
-				{ $match: { date: regex } },
-				{ $sort: { date: 1, hour: 1 } }], function (err, result) {
-				if (err) {
-					return resp.status(HttpStatusCode.code.INTERNAL_SERVER).json({ errors: [err] })
-				} else {
-					resp.status(HttpStatusCode.code.OK).json(result)
-				}
-			})
-		} else {
-			return resp.status(HttpStatusCode.code.BAD_REQUEST).send({ errors: ["Error on to get statement"] })
-		}
-	})
+		Operation.find((err, operation) => {
+			if (err) {
+				return resp.status(HttpStatusCode.code.INTERNAL_SERVER).json({ errors: [err] })
+			} else if (operation) {
+				Operation.aggregate([
+					{ $match: { date: regex } },
+					{ $sort: { date: 1, hour: 1 } }], function (err, result) {
+					if (err) {
+						return resp.status(HttpStatusCode.code.INTERNAL_SERVER).json({ errors: [err] })
+					} else {
+						resp.status(HttpStatusCode.code.OK).json(result)
+					}
+				})
+			} else {
+				return resp.status(HttpStatusCode.code.BAD_REQUEST).send({ errors: ["Error on to get statement"] })
+			}
+		})
+	}catch(error){
+		throw new Error(error.message)
+	}
 })
 
 
