@@ -121,7 +121,7 @@ Operation.route("getStatementByDate",(req,resp)=>{
 		}else if(operation){
 			Operation.aggregate([
 				{$match: {date: regex}},
-				{$sort : {date: 1}}],function (err, result) {
+				{$sort : {date: 1,hour:1}}],function (err, result) {
 				if(err) {
 					return resp.status(800).json({errors:[err]})
 				}else{
