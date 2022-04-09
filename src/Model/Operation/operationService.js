@@ -119,12 +119,13 @@ let validatenHour = (hourComplete) => {
 
 Operation.route("balance", (req, resp) => {
 	try{
+		const idUser = req.query.idUser
 		let sumCredit = 0
 		let sumDebit = 0
-		calculateTotalCredit().then((sum) => {
-			sumCredit = sum.sumCredit
-			calculateTotalDebit().then((sum) => {
-				sumDebit = sum.sumDebit
+		calculateTotalCredit(resp,idUser).then((sum) => {
+			sumCredit = sum.sumCredit || 0
+			calculateTotalDebit(resp,idUser).then((sum) => {
+				sumDebit = sum.sumDebit || 0
 				calculateBalance(sumCredit, sumDebit, resp)
 			})
 		})
@@ -133,46 +134,57 @@ Operation.route("balance", (req, resp) => {
 	}
 })
 
-let calculateTotalCredit = (resp) => {
+let calculateTotalCredit = (resp,idUser) => {
 
+	
 	return new Promise(resolve => {
-		Operation.aggregate([
-			{ $match: { type: "Credit" } },
-			{
-				$group: {
-					_id: null,
-					sumCredit: { $sum: "$amount" }
+		try{
+			Operation.aggregate([
+				{ $match: { type: "Credit" } },
+				{ $match: { idUser: idUser } },
+				{
+					$group: {
+						_id: null,
+						sumCredit: { $sum: "$amount" }
+					}
+				}, { $project: { _id: 0, sumCredit: 1 } }
+			],
+			function (err, sumCredit) {
+				if (err) {
+					return resp.status(HttpStatusCode.INTERNAL_SERVER).json({ errors: [err] })
+				} else {
+					resolve(sumCredit[0]||0)
 				}
-			}, { $project: { _id: 0, sumCredit: 1 } }
-		],
-		function (err, sumCredit) {
-			if (err) {
-				return resp.status(500).json({ errors: [err] })
-			} else {
-				resolve(sumCredit[0])
-			}
-		})
+			})
+		}catch(error){
+			return resp.status(HttpStatusCode.INTERNAL_SERVER).json({ errors: [error.message] })
+		}
 	})
 }
 
-let calculateTotalDebit = (resp) => {
+let calculateTotalDebit = (resp,idUser) => {
 	return new Promise(resolve => {
-		Operation.aggregate([
-			{ $match: { type: "Debit" } },
-			{
-				$group: {
-					_id: null,
-					sumDebit: { $sum: "$amount" }
+		try{
+			Operation.aggregate([
+				{ $match: { type: "Debit" } },
+				{ $match: { idUser: idUser } },
+				{
+					$group: {
+						_id: null,
+						sumDebit: { $sum: "$amount" }
+					}
+				}, { $project: { _id: 0, sumDebit: 1 } }
+			],
+			function (err, sumDebit) {
+				if (err) {
+					return resp.status(HttpStatusCode.INTERNAL_SERVER).json({ errors: [err] })
+				} else {
+					resolve(sumDebit[0]||0)
 				}
-			}, { $project: { _id: 0, sumDebit: 1 } }
-		],
-		function (err, sumDebit) {
-			if (err) {
-				return resp.status(500).json({ errors: [err] })
-			} else {
-				resolve(sumDebit[0])
-			}
-		})
+			})
+		}catch(error){
+			return resp.status(HttpStatusCode.INTERNAL_SERVER).json({ errors: [error.message] })
+		}
 	})
 }
 
