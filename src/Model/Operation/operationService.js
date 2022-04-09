@@ -134,9 +134,7 @@ Operation.route("balance", (req, resp) => {
 	}
 })
 
-let calculateTotalCredit = (resp,idUser) => {
-
-	
+let calculateTotalCredit = (resp,idUser) => {	
 	return new Promise(resolve => {
 		try{
 			Operation.aggregate([
@@ -200,6 +198,7 @@ Operation.route("getStatementByDate", (req, resp) => {
 	try{
 		const month = req.query.month
 		const year = req.query.year
+		const idUser = req.query.idUser
 
 		let regex = new RegExp("" + month + "/.*/" + year)
 
@@ -209,6 +208,7 @@ Operation.route("getStatementByDate", (req, resp) => {
 			} else if (operation) {
 				Operation.aggregate([
 					{ $match: { date: regex } },
+					{ $match: { idUser: idUser } },
 					{ $sort: { date: 1, hour: 1 } }], function (err, result) {
 					if (err) {
 						return resp.status(HttpStatusCode.code.INTERNAL_SERVER).json({ errors: [err] })

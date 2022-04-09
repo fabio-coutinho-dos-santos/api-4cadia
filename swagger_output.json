@@ -346,7 +346,7 @@
       }
     },
 
-    "/api/operation/balance":{
+    "/api/operation/balance/?idUser={idUser}":{
       "get": {
         "tags":["Operation"],
         "summary": "Get balance",
@@ -389,7 +389,7 @@
       }
     },
 
-    "/api/operation/getStatementByDate?month={month}&year={year}":{
+    "/api/operation/getStatementByDate?idUser={idUser}&month={month}&year={year}":{
       "get": {
         "tags":["Operation"],
         "summary": "Get statement by date",
