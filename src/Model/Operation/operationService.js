@@ -44,7 +44,7 @@ Operation.route("save", (req, resp) => {
 			if (err) {
 				return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: [err] })
 			} else {
-				resp.status(201).json(newOperation)
+				resp.status(HttpStatusCode.code.POST_OK).json(newOperation)
 			}
 		})
 	}else if (validateDate(date) && !validatenHour(hour)){

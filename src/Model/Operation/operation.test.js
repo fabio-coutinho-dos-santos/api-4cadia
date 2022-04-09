@@ -50,7 +50,8 @@ test("Test Save Operation",()=>{
 			type:"Credit"
 		})
 		.then(response => {
-			expect(response.status).toBe(201)
+			200,
+			expect(response.status).toBe(HttpStatusCode.code.POST_OK)
 			expect(response.body._id).toBeDefined()
 			expect(response.body.idUser).toBe("624d71ff3526da02eacab759")
 			expect(response.body.code).toBe("1234")

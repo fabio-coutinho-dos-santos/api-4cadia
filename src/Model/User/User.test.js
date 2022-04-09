@@ -38,14 +38,13 @@ test("Test Register User with different passwords",()=>{
 	return request (URL_TEST)
 		.post("/oapi/signup")
 		.send({
-
 			name:"Fabio Coutinho",
 			email:"fabio.santcou@gmail.com",
 			password:"S@ntcou90",
 			confirmPassword:"S@ntcou9"
 		})
 		.then(response => {
-			expect(response.status).toBe(HttpStatusCode.code.BAD_REQUEST)
+			expect(response.status).toBe(HttpStatusCode.code.PASSWORD_DIFFFERENT)
 		})
 })
 

@@ -34,7 +34,7 @@ const login = (req, res) => {
 const validateToken = (req, res) => {
 	const token = req.body.token || ""
 	jwt.verify(token, env.authSecret, function(err) {
-		return res.status(200).send({valid: !err})
+		return res.status(HttpStatusCode.code.OK).send({valid: !err})
 	})
 }
 
@@ -49,7 +49,7 @@ const signup = (req, res, next) => {
 	}
 
 	if(!password.match(passwordRegex)) {
-		return res.status(HttpStatusCode.code.BAD_REQUEST).send({errors: [
+		return res.status(HttpStatusCode.code.PASSWORD_INVALID).send({errors: [
 			"Invalid password"
 		]})
 	}
@@ -57,7 +57,7 @@ const signup = (req, res, next) => {
 	const salt = bcrypt.genSaltSync()
 	const passwordHash = bcrypt.hashSync(password, salt)
 	if(!bcrypt.compareSync(confirmPassword, passwordHash)) {
-		return res.status(HttpStatusCode.code.BAD_REQUEST).send({errors: ["Passwords don't match"]})
+		return res.status(HttpStatusCode.code.PASSWORD_DIFFFERENT).send({errors: ["Passwords don't match"]})
 	}
 
 	User.findOne({email}, (err, user) => {
