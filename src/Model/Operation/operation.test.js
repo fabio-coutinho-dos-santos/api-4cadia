@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const request = require("supertest")
 const URL_TEST = "localhost:3000"
+const HttpStatusCode = require("../../Untils/HttpStatusCodes")
 
 let globalToken=""
 
@@ -20,7 +21,7 @@ test("Test Login with User registered",()=>{
 			password:"S@ntcou90"
 		})
 		.then(response => {
-			expect(response.status).toBe(200)
+			expect(response.status).toBe(HttpStatusCode.code.OK)
 			expect(response.body._id).toBeDefined()
 			expect(response.body.name).toBe("Fabio Coutinho")
 			expect(response.body.token).toBeDefined()
@@ -80,7 +81,7 @@ test("Test Save Operation with wrong hour",()=>{
 			type:"Credit"
 		})
 		.then(response => {
-			expect(response.status).toBe(400)
+			expect(response.status).toBe(HttpStatusCode.code.BAD_REQUEST)
 		})
 })
 
@@ -103,7 +104,7 @@ test("Test Save Operation with wrong minutes",()=>{
 			type:"Credit"
 		})
 		.then(response => {
-			expect(response.status).toBe(400)
+			expect(response.status).toBe(HttpStatusCode.code.BAD_REQUEST)
 			expect(response.body.errors).toBe("Invalid hour")
 		})
 })
@@ -127,7 +128,7 @@ test("Test Save Operation with wrong day",()=>{
 			type:"Credit"
 		})
 		.then(response => {
-			expect(response.status).toBe(400)
+			expect(response.status).toBe(HttpStatusCode.code.BAD_REQUEST)
 			expect(response.body.errors).toBe("Invalid date")
 
 		})
@@ -152,7 +153,7 @@ test("Test Save Operation with wrong month",()=>{
 			type:"Credit"
 		})
 		.then(response => {
-			expect(response.status).toBe(400)
+			expect(response.status).toBe(HttpStatusCode.code.BAD_REQUEST)
 			expect(response.body.errors).toBe("Invalid date")
 
 		})
@@ -177,7 +178,7 @@ test("Test Save Operation with wrong date and time",()=>{
 			type:"Credit"
 		})
 		.then(response => {
-			expect(response.status).toBe(400)
+			expect(response.status).toBe(HttpStatusCode.code.BAD_REQUEST)
 			expect(response.body.errors).toBe("Invalid date and hour")
 
 		})
@@ -197,7 +198,7 @@ test("Test Calculate balance",()=>{
 		.get("/api/operation/balance")
 		.set(commonHeaders)
 		.then(response => {
-			expect(response.status).toBe(200)
+			expect(response.status).toBe(HttpStatusCode.code.OK)
 			expect(response.body.balance).toBeDefined()
 		})
 })
@@ -214,7 +215,7 @@ test("Test Calculate balance with wron token",()=>{
 		.get("/api/operation/balance")
 		.set(commonHeaders)
 		.then(response => {
-			expect(response.status).toBe(403)
+			expect(response.status).toBe(HttpStatusCode.code.FORBIDDEN)
 		})
 })
 //==================================================================================================================================================================================================
@@ -231,7 +232,7 @@ test("Test get statement by date",()=>{
 		.get("/api/operation/getStatementByDate?month=04&year=2022")
 		.set(commonHeaders)
 		.then(response => {
-			expect(response.status).toBe(200)
+			expect(response.status).toBe(HttpStatusCode.code.OK)
 		})
 })
 

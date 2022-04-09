@@ -3,15 +3,14 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const User = require("./user")
 const env = require("../../Config/constants")
-
 const emailRegex = /\S+@\S+\.\S+/
 const passwordRegex = /((?=.*\d)(?=.*[a-z]).{6,12})/
-
+const HttpStatusCode = require("../../Untils/HttpStatusCodes")
 
 const sendErrorsFromDB = (res, dbErrors) => {
 	const errors = []
 	lodash.forIn(dbErrors.errors, error => errors.push(error.message))
-	return res.status(400).json({errors})
+	return res.status(HttpStatusCode.code.BAD_REQUEST).json({errors})
 }
 
 const login = (req, res) => {
@@ -27,7 +26,7 @@ const login = (req, res) => {
 			const {_id, name, email} = user
 			res.json({_id, name, email, token })
 		} else {
-			return res.status(400).send({errors: ["Invalid user or password"]})
+			return res.status(HttpStatusCode.code.BAD_REQUEST).send({errors: ["Invalid user or password"]})
 		}
 	})
 }
@@ -46,11 +45,11 @@ const signup = (req, res, next) => {
 	const confirmPassword = req.body.confirmPassword || ""
 
 	if(!email.match(emailRegex)) {
-		return res.status(400).send({errors: ["Invalid email"]})
+		return res.status(HttpStatusCode.code.BAD_REQUEST).send({errors: ["Invalid email"]})
 	}
 
 	if(!password.match(passwordRegex)) {
-		return res.status(401).send({errors: [
+		return res.status(HttpStatusCode.code.BAD_REQUEST).send({errors: [
 			"Invalid password"
 		]})
 	}
@@ -58,7 +57,7 @@ const signup = (req, res, next) => {
 	const salt = bcrypt.genSaltSync()
 	const passwordHash = bcrypt.hashSync(password, salt)
 	if(!bcrypt.compareSync(confirmPassword, passwordHash)) {
-		return res.status(402).send({errors: ["Passwords don't match"]})
+		return res.status(HttpStatusCode.code.BAD_REQUEST).send({errors: ["Passwords don't match"]})
 	}
 
 	User.findOne({email}, (err, user) => {
@@ -66,7 +65,7 @@ const signup = (req, res, next) => {
 		if(err) {
 			return sendErrorsFromDB(res, err)
 		} else if (user) {
-			return res.status(403).send({errors: ["This user is already registered"]})
+			return res.status(HttpStatusCode.code.FORBIDDEN).send({errors: ["This user is already registered"]})
 		} else {
 			const newUser = new User({ name, email, password: passwordHash})
 			newUser.save(err => {

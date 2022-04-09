@@ -1,5 +1,6 @@
 const User = require("./user")
 const lodash = require("lodash")
+const HttpStatusCode = require("../../Untils/HttpStatusCodes")
 
 User.methods(["get","put","delete"])
 User.updateOptions({new:true, runValidators: true})
@@ -11,7 +12,7 @@ function sendErrorsOrNext(req, resp, next){
 
 	if(bundle.errors){
 		var errors = parseErrors(bundle.errors)
-		resp.status(500).json({errors})
+		resp.status(HttpStatusCode.code.INTERNAL_SERVER).json({errors})
 	}else{
 		next()
 	}

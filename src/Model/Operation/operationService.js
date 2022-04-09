@@ -1,5 +1,6 @@
 const Operation = require("./operation")
 const lodash = require("lodash")
+const HttpStatusCode = require("../../Untils/HttpStatusCodes")
 
 Operation.methods(["get", "put", "delete"])
 Operation.updateOptions({ new: true, runValidators: true })
@@ -11,7 +12,7 @@ function sendErrorsOrNext(req, resp, next) {
 
 	if (bundle.errors) {
 		var errors = parseErrors(bundle.errors)
-		resp.status(500).json({ errors })
+		resp.status(HttpStatusCode.code.INTERNAL_SERVER).json({ errors })
 	} else {
 		next()
 	}
@@ -41,17 +42,17 @@ Operation.route("save", (req, resp) => {
 
 		newOperation.save(err => {
 			if (err) {
-				return resp.status(400).json({ errors: [err] })
+				return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: [err] })
 			} else {
 				resp.status(201).json(newOperation)
 			}
 		})
 	}else if (validateDate(date) && !validatenHour(hour)){
-		return resp.status(400).json({ errors: "Invalid hour" })
+		return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: "Invalid hour" })
 	}else if (!validateDate(date) && validatenHour(hour)){
-		return resp.status(400).json({ errors: "Invalid date" })
+		return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: "Invalid date" })
 	}else if (!validateDate(date) && !validatenHour(hour)){
-		return resp.status(400).json({ errors: "Invalid date and hour" })
+		return resp.status(HttpStatusCode.code.BAD_REQUEST).json({ errors: "Invalid date and hour" })
 	}
 	
 
@@ -170,7 +171,7 @@ let calculateTotalDebit = (resp) => {
 
 let calculateBalance = (sumCredit, sumDebit, resp) => {
 	let balance = sumCredit - sumDebit
-	resp.status(200).json({ balance: balance })
+	resp.status(HttpStatusCode.code.OK).json({ balance: balance })
 }
 
 // ============================================================================ Functions to calculate balance =====================================================================================
@@ -184,19 +185,19 @@ Operation.route("getStatementByDate", (req, resp) => {
 
 	Operation.find((err, operation) => {
 		if (err) {
-			return resp.status(500).json({ errors: [err] })
+			return resp.status(HttpStatusCode.code.INTERNAL_SERVER).json({ errors: [err] })
 		} else if (operation) {
 			Operation.aggregate([
 				{ $match: { date: regex } },
 				{ $sort: { date: 1, hour: 1 } }], function (err, result) {
 				if (err) {
-					return resp.status(800).json({ errors: [err] })
+					return resp.status(HttpStatusCode.code.INTERNAL_SERVER).json({ errors: [err] })
 				} else {
-					resp.status(200).json(result)
+					resp.status(HttpStatusCode.code.OK).json(result)
 				}
 			})
 		} else {
-			return resp.status(400).send({ errors: ["Error on to get statement"] })
+			return resp.status(HttpStatusCode.code.BAD_REQUEST).send({ errors: ["Error on to get statement"] })
 		}
 	})
 })

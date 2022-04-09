@@ -1,13 +1,9 @@
 /* eslint-disable no-undef */
 const request = require("supertest")
 const URL_TEST = "localhost:3000"
+const HttpStatusCode = require("../../Untils/HttpStatusCodes")
+
 let token=""
-
-beforeAll(()=>{
-	const User = require("../User/user")
-	User.remove({}).exec() //clean database before register the user
-})
-
 
 //====================================================================== Register tests ==================================================================================
 
@@ -25,9 +21,9 @@ test("Test Register User registered",()=>{
 		.then(response => {
 
 			if(response.status!=200){
-				expect(response.status).toBe(403) // if User already registered
+				expect(response.status).toBe(HttpStatusCode.code.FORBIDDEN) // if User already registered
 			}else{
-				expect(response.status).toBe(200)
+				expect(response.status).toBe(HttpStatusCode.code.OK)
 				expect(response.body._id).toBeDefined()
 				expect(response.body.token).toBeDefined()
 				expect(response.body.name).toBe("Fabio Coutinho")
@@ -49,7 +45,7 @@ test("Test Register User with different passwords",()=>{
 			confirmPassword:"S@ntcou9"
 		})
 		.then(response => {
-			expect(response.status).toBe(402)
+			expect(response.status).toBe(HttpStatusCode.code.BAD_REQUEST)
 		})
 })
 
@@ -66,7 +62,7 @@ test("Test Login with User registered",()=>{
 			password:"S@ntcou90"
 		})
 		.then(response => {
-			expect(response.status).toBe(200)
+			expect(response.status).toBe(HttpStatusCode.code.OK)
 			expect(response.body._id).toBeDefined()
 			expect(response.body.name).toBe("Fabio Coutinho")
 			expect(response.body.token).toBeDefined()
@@ -83,7 +79,7 @@ test("Test login with wrong Password registered",()=>{
 			password:"S@ntcou9"
 		})
 		.then(response => {
-			expect(response.status).toBe(400)
+			expect(response.status).toBe(HttpStatusCode.code.BAD_REQUEST)
 		})
 })
 
@@ -95,7 +91,7 @@ test("Test login with wrong email registered",()=>{
 			password:"S@ntcou90"
 		})
 		.then(response => {
-			expect(response.status).toBe(400)
+			expect(response.status).toBe(HttpStatusCode.code.BAD_REQUEST)
 		})
 })
 
@@ -110,7 +106,7 @@ test("Test Validate Token User with valid token",()=>{
 			token:token,
 		})
 		.then(response => {
-			expect(response.status).toBe(200)
+			expect(response.status).toBe(HttpStatusCode.code.OK)
 			expect(response.body.valid).toBe(true)
 		})
 })
@@ -122,7 +118,7 @@ test("Test Validate Token User with unvalid token",()=>{
 			token:"sdfsdfisi9990898d7fsd8f7sdf",
 		})
 		.then(response => {
-			expect(response.status).toBe(200)
+			expect(response.status).toBe(HttpStatusCode.code.OK)
 			expect(response.body.valid).toBe(false)
 		})
 })
