@@ -23,7 +23,6 @@ test("Test Login with User registered",()=>{
 		.then(response => {
 			expect(response.status).toBe(HttpStatusCode.code.OK)
 			expect(response.body._id).toBeDefined()
-			expect(response.body.name).toBe("Fabio Coutinho")
 			expect(response.body.token).toBeDefined()
 			expect(response.body.email).toBe("fabio.santcou@gmail.com")
 			globalToken = response.body.token
