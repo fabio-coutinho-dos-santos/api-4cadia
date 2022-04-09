@@ -5,7 +5,7 @@
     "title": "REST API - TEST 4CADIA",
     "description": ""
   },
-  "host": "localhost:3000",
+  "host": "coutmastersolution.ml",
   "basePath": "/",
   "schemes": [
     "http",
@@ -74,7 +74,7 @@
       }
     },
   
-    "/oapi/user/signup":{
+    "/api/user/signup":{
       "post": {
         "tags":["User"],
         "summary": "Register a new user",
@@ -168,7 +168,7 @@
       }
     },
 
-    "/oapi/user/login":{
+    "/api/user/login":{
       "post": {
         "tags":["User"],
         "summary": "User login",
@@ -215,7 +215,7 @@
       }
     },
     
-    "/oapi/user/validateToken":{
+    "/api/user/validateToken":{
       "post": {
         "tags":["User"],
         "summary": "Validate a owner authorization token",

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const request = require("supertest")
-const URL_TEST = "localhost:3000"
+const URL_TEST = process.env.URL_TEST || "localhost:3000"
 const HttpStatusCode = require("../../Untils/HttpStatusCodes")
 
 let token=""
