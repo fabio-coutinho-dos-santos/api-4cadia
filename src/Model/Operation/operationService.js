@@ -192,7 +192,7 @@ let calculateTotalDebit = (resp,idUser) => {
 
 let calculateBalance = (sumCredit, sumDebit, resp) => {
 	let balance = sumCredit - sumDebit
-	resp.status(HttpStatusCode.code.OK).json({ balance: balance })
+	resp.status(HttpStatusCode.code.OK).json({ balance: balance.toFixed(2) })
 }
 
 // =================================================================================================================================================================================================
