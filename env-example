@@ -2,9 +2,11 @@ NODE_ENV=development
 
 # Server
 SERVER_PORT=3000
+AUTH_SECRET=sdasdasddetgdafaedsaea
+URL_TEST=localhost:3000
 
 # DB
-DB_HOST=db-wa
+DB_HOST=db-name
 #DB_HOST=0.0.0.0
 DB_PORT=27017
 DB_NAME=nodeauth
