@@ -12,7 +12,6 @@ beforeAll(()=>{
 
 //====================================================================== Save Operation tests ==================================================================================
 
-// to make login with user registered to get the token
 test("Test Login with User registered",()=>{
 	return request (URL_TEST)
 		.post("/oapi/login")

@@ -15,7 +15,7 @@ server.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 try{
 	server.listen(process.emit.PORT||port,()=>{
-		console.log("Backend rodando na porta " + port)
+		console.log("Backend running on port " + port)
 	})	
 }catch(error){
 	throw new Error(error.message)

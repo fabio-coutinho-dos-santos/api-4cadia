@@ -2,9 +2,9 @@ const User = require("./user")
 const lodash = require("lodash")
 const HttpStatusCode = require("../../Untils/HttpStatusCodes")
 
+// Generate methods get, put and delete automatically to operations route
 User.methods(["get","put","delete"])
 User.updateOptions({new:true, runValidators: true})
-
 User.after("put",sendErrorsOrNext)
 
 function sendErrorsOrNext(req, resp, next){

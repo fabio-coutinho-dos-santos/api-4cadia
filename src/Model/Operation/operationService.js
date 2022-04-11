@@ -2,9 +2,9 @@ const Operation = require("./operation")
 const lodash = require("lodash")
 const HttpStatusCode = require("../../Untils/HttpStatusCodes")
 
-Operation.methods(["get", "put", "delete"])
+// Generate methods get, put and delete automatically to user route
+Operation.methods(["get", "put", "delete"]) 
 Operation.updateOptions({ new: true, runValidators: true })
-
 Operation.after("put", sendErrorsOrNext)
 
 function sendErrorsOrNext(req, resp, next) {
@@ -26,6 +26,8 @@ function parseErrors(nodeRestfulErrors) {
 
 	return errors
 }
+
+// ============================================================================ Functions to save a operation =====================================================================================
 
 Operation.route("save", (req, resp) => {
 
@@ -115,6 +117,8 @@ let validatenHour = (hourComplete) => {
 	}
 }
 
+// =================================================================================================================================================================================================
+
 // ============================================================================ Functions to calculate balance =====================================================================================
 
 Operation.route("balance", (req, resp) => {
@@ -191,7 +195,9 @@ let calculateBalance = (sumCredit, sumDebit, resp) => {
 	resp.status(HttpStatusCode.code.OK).json({ balance: balance })
 }
 
-// ============================================================================ Functions to calculate balance =====================================================================================
+// =================================================================================================================================================================================================
+
+// ============================================================================ Functions to get statement by date =================================================================================
 
 Operation.route("getStatementByDate", (req, resp) => {
 
@@ -224,6 +230,8 @@ Operation.route("getStatementByDate", (req, resp) => {
 		throw new Error(error.message)
 	}
 })
+
+// =================================================================================================================================================================================================
 
 
 module.exports = Operation
