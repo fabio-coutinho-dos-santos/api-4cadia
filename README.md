@@ -55,7 +55,7 @@ Além das funções de gerenciamento das collections por meio das rotas, também
 
 Além dos testes automatizados, visando facilitar a escalabilidade e automatização de processos a api é executada utilizando docker-compose de forma que dois containers são criados na execução, um para o banco de dados e outro para a aplicação. Estes containers são conectados por uma network que deve ser construída via docker.
 
-##Deploy
+## Deploy
 Assim como no projeto do front-end, para economizar tempo na execução deste teste foi realizado o deploy da API em um droplet da digital ocean registrado no domínio https://coutmastersolution.ml/.
 
 **IMPORTANTE**: Toda a documentação para utilização da API contendo a descrição das rotas e o modelo das  informações trafegadas foram elaboradas utilizando o Swagger e podem ser consutadas acessando https://coutmastersolution.ml/api/doc
