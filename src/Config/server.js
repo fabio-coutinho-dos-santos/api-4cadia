@@ -1,4 +1,4 @@
-const port = 3000
+const port = 3001
 const bodyParser = require("body-parser")
 const express = require("express")
 const server = express()
@@ -14,7 +14,7 @@ server.use(allowCors)
 server.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 try{
-	server.listen(process.emit.PORT||port,()=>{
+	server.listen(process.emit.SERVER_PORT||port,()=>{
 		console.log("Backend running on port " + port)
 	})	
 }catch(error){

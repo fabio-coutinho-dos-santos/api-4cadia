@@ -5,7 +5,7 @@
     "title": "REST API - TEST 4CADIA",
     "description": ""
   },
-  "host": "coutmastersolution.ml",
+  "host": "68.183.96.109",
   "basePath": "/",
   "schemes": [
     "http",
